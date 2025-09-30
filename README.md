@@ -1,3 +1,22 @@
+# 📚 BorrowBook Project
+
+A simple **Library Management System** built with **Java** and **Spring Boot** 🚀
+
+## ✨ Features
+- Manage entities: **Books**, **Authors**, **Categories**, and **Members** 📝
+- Relationships between entities (One-to-Many, Many-to-Many) 🔗
+- Searching and filtering with **Criteria API** 🔍
+- H2 in-memory database for development & testing 🧪
+
+## 🎯 Goal
+This project is a **learning playground** to practice:
+- Java & Spring Boot basics
+- Hibernate & JPA mappings
+- RESTful API development
+- ...
+
+---
+
 # BorrowBook (Phase 1)
 
 This project is the initial setup for a **Borrow Book Management System** built with **Spring Boot** and **MySQL** (production) / **H2** (test environment).  
