@@ -60,3 +60,16 @@ Thumbs.db
 *.class
 *.war
 *.ear
+
+### Spring Boot configs ###
+# Local application configs (don’t commit secrets)
+application.properties
+application.yml
+
+# Allow sample configs
+!application-sample.properties
+!application-sample.yml
+
+# Ignore application config
+src/main/resources/application.properties
+src/main/resources/application.yml

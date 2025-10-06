@@ -25,15 +25,18 @@ public class User implements UserDetails {
     private String password;
     private String email;
     private String phone;
-    private String role;
+
+    @ElementCollection(targetClass = Role.class,fetch = FetchType.EAGER)
+    @CollectionTable(name ="roles"
+    , joinColumns = @JoinColumn(name = "id",referencedColumnName = "id"))
+    @Enumerated(EnumType.STRING)
+    private List<Role> role;
     private boolean enabled = true;
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<SimpleGrantedAuthority> roles = Arrays.stream(role.split(","))
-                .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
-        return roles;
+        return role;
     }
 
     @Override
