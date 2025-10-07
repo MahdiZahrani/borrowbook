@@ -1,5 +1,7 @@
 package ir.mzahrani.exception;
 
+import ir.mzahrani.entity.ErrorDetails;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -7,7 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import java.util.Map;
+
+import java.time.LocalDateTime;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -15,19 +18,38 @@ public class GlobalExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<Map<String, String>> handleAuthenticationException(AuthenticationException ex) {
-        System.out.println("Authentication failed: " + ex.getMessage());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(Map.of("error", "Invalid username or password"));
+    public ResponseEntity<ErrorDetails> handleAuthenticationException(AuthenticationException ex, HttpServletRequest request) {
+        return createErrorResponse(new Exception("Invalid username or password"),request,HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleException(Exception ex) {
+    public ResponseEntity<ErrorDetails> handleException(Exception ex, HttpServletRequest request) {
         logger.error("Unexpected error occurred: ", ex);
+        return  createErrorResponse(ex,request,HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("An unexpected error occurred. Please contact support.");
+    @ExceptionHandler({
+            BookNotFoundException.class,
+            MemberNotFoundException.class,
+            InsufficientBalanceException.class,
+            BookUnavailableException.class,
+            AlreadyInWaitingListException.class,
+            ConcurrentBorrowException.class
+    })
+    public ResponseEntity<ErrorDetails> handleBusinessExceptions(Exception ex, HttpServletRequest request) {
+        return createErrorResponse(ex, request, HttpStatus.BAD_REQUEST);
+    }
+
+    private ResponseEntity<ErrorDetails> createErrorResponse(
+            Exception e,
+            HttpServletRequest request,
+            HttpStatus status){
+        ErrorDetails errorDetails = new ErrorDetails();
+        errorDetails.setErrorCode(status.value());
+        errorDetails.setErrorMessage(e.getMessage());
+        errorDetails.setPath(request.getRequestURI());
+        errorDetails.setTimestamp(LocalDateTime.now());
+        return new ResponseEntity<>(errorDetails, status);
     }
 
 

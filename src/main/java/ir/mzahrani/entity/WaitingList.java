@@ -5,29 +5,26 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
+import java.time.LocalDate;
 
 @Entity
-@Table
+@Table(name = "waiting_list")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Member {
+public class WaitingList {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
-    @JoinColumn(name = "user_id")
-    private User user;
+    @ManyToOne
+    @JoinColumn(name = "book_id")
+    private Book book;
 
-    private Double balance;
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
 
-    private Double activate;
-
-    @OneToMany(mappedBy = "member")
-    private Set<Borrow> borrows;
-
-
+    private LocalDate requestDate;
 }

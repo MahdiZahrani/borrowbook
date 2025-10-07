@@ -32,4 +32,8 @@ public class Book {
     )
     private Set<Category> categories;
 
+    private int totalCopies;
+
+    private int availableCopies;
+
 }
