@@ -1,6 +1,7 @@
 package ir.mzahrani.service;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ServiceInterface<T,ID> {
 
@@ -10,7 +11,7 @@ public interface ServiceInterface<T,ID> {
 
     void delete(ID id);
 
-    T get(ID id);
+    Optional<T> get(ID id);
 
-//    List<T> getAll();
+    List<T> getAll();
 }

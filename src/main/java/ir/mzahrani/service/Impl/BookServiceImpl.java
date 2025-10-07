@@ -11,34 +11,12 @@ import java.util.List;
 
 @Service
 @Transactional
-@AllArgsConstructor
-
-public class BookServiceImpl implements BookServiceInterface {
+public class BookServiceImpl extends BaseService<Book,Long> implements BookServiceInterface {
 
     private final BookRepository bookRepository;
-
-    @Override
-    public Book create(Book entity) {
-        return null;
+    public BookServiceImpl(BookRepository bookRepository) {
+        super(bookRepository);
+        this.bookRepository = bookRepository;
     }
 
-    @Override
-    public Book update(Book entity) {
-        return null;
-    }
-
-    @Override
-    public void delete(Long aLong) {
-
-    }
-
-    @Override
-    public Book get(Long aLong) {
-        return null;
-    }
-//
-//    @Override
-//    public List<Book> getAll() {
-//        return List.of();
-//    }
 }
